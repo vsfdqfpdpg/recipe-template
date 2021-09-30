@@ -1,0 +1,53 @@
+<%- include("../layouts/header") %>
+<div class="mt-3 container">
+  <div class="row">
+    <table class="table">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Preservable</th>
+        <th>Cooking Style</th>
+        <th>Category</th>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Duration</th>
+        <th>Status</th>
+      </tr>
+      <% locals?.recipes?.rows.forEach( recipe => { %>
+      <tr>
+        <td><%= recipe.id %></td>
+        <td><%= recipe.name %></td>
+        <td><%= recipe.preserve %></td>
+        <td>
+          <%= locals?.enums?.CookingStyle[recipe.cooking_style][0] +
+          locals?.enums?.CookingStyle[recipe.cooking_style].slice(1).toLowerCase()
+          %>
+        </td>
+        <td>
+          <% recipe.category.split(",").forEach(c => { %> <%=
+          locals?.enums?.Category[c][0] +
+          locals?.enums?.Category[c].slice(1).toLowerCase() %> <% }) %>
+        </td>
+        <td>
+          <img
+            src="<%= recipe.image %>"
+            alt=""
+            srcset=""
+            width="100px"
+            height="100px"
+          />
+        </td>
+        <td><%= recipe.description %></td>
+        <td><%= recipe.duration %></td>
+        <td>
+          <%= locals?.enums?.Status[recipe.status][0] +
+          locals?.enums?.Status[recipe.status].slice(1).toLowerCase() %>
+        </td>
+      </tr>
+
+      <% }) %>
+    </table>
+  </div>
+  <pre> <%= JSON.stringify(locals,null,4) %></pre>
+</div>
+<%- include("../layouts/footer") %>

@@ -1,0 +1,16 @@
+<%- include("../../layouts/header") %>
+<div class="container">
+  <style>
+    .sidebar {
+      position: sticky;
+      top: 72px;
+      height: calc(100vh - 72px);
+      min-height: calc(100vh - 72px);
+    }
+  </style>
+  <div class="row">
+    <nav class="bg-light col-lg-2 col-md-3 sidebar">
+      <a href="/user" class="nav-link mt-3">Basic Info</a>
+      <a href="/user/<%= locals?.user?.id%>/recipes" class="nav-link">Recipes</a>
+    </nav>
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">

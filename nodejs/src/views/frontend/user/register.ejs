@@ -1,0 +1,55 @@
+<%- include("../layouts/header") %>
+
+<div class="container">
+  <form action="/user/store" method="post">
+    <div class="mb-3">
+      <label for="first_name">First Name</label>
+      <input type="text" name="first_name" id="first_name" class="form-control
+      <%= locals?.oldInput?.first_name?.message ? "is-invalid" : "" %>"
+      value="<%= locals?.oldInput?.first_name?.value %>" />
+      <div id="" class="invalid-feedback">
+        <%= locals?.oldInput?.first_name?.message %>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="last_name">Last Name</label>
+      <input type="text" name="last_name" id="last_name" class="form-control <%=
+      locals?.oldInput?.last_name?.message ? "is-invalid" : "" %>" value="<%=
+      locals?.oldInput?.last_name?.value %>" />
+      <div id="" class="invalid-feedback">
+        <%= locals?.oldInput?.last_name?.message %>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" class="form-control <%=
+      locals?.oldInput?.email?.message ? "is-invalid" : "" %>" value="<%=
+      locals?.oldInput?.email?.value %>" />
+      <div id="" class="invalid-feedback">
+        <%= locals?.oldInput?.email?.message %>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" class="form-control
+      <%= locals?.oldInput?.password?.message ? "is-invalid" : "" %>" />
+      <div id="" class="invalid-feedback">
+        <%= locals?.oldInput?.password?.message %>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="confirm">Confirm Password</label>
+      <input type="password" name="confirm" id="confirm" class="form-control <%=
+      locals?.oldInput?.confirm?.message ? "is-invalid" : "" %>" />
+      <div id="" class="invalid-feedback">
+        <%= locals?.oldInput?.confirm?.message %>
+      </div>
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-sm btn-primary form-control">
+        Register
+      </button>
+    </div>
+  </form>
+</div>
+<%- include("../layouts/footer") %>
