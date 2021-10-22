@@ -19,11 +19,23 @@
       }
       .sidebar {
         position: fixed;
-        top: 0;
+        top: 20px;
         left: 0;
         bottom: 0;
         padding: 3.5rem 0 0;
         z-index: 100;
+      }
+
+      .sidebar .nav-link{
+        margin: 0 20px;
+      }
+
+      .sidebar .nav-link.active{
+        color: #fff;
+        background-color: #0d6efd;
+        border: 0;
+        border-radius: .25rem;
+        
       }
     </style>
   </head>
@@ -47,8 +59,9 @@
     <div class="container-fluid">
       <div class="row">
         <nav class="nav flex-column sidebar col-md-3 col-lg-2 bg-light">
-          <a href="/admin/user" class="nav-link">Users</a>
-          <a href="/admin/role" class="nav-link">Role</a>
-          <a href="/admin/permission" class="nav-link">Permission</a>
+          <a href="/admin/user" class="nav-link <%= /\/admin\/user.*/.test(locals.url) ? "active": "" %>">Users</a>
+          <a href="/admin/recipe" class="nav-link <%= /\/admin\/recipe.*/.test(locals.url) ? "active": "" %>">Recipes</a>
+          <a href="/admin/role" class="nav-link <%= /\/admin\/role.*/.test(locals.url) ? "active": "" %>">Role</a>
+          <a href="/admin/permission" class="nav-link <%= /\/admin\/permission.*/.test(locals.url) ? "active": "" %>">Permission</a>
         </nav>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">

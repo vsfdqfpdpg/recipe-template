@@ -11,7 +11,7 @@ const passport = require("koa-passport");
 const niv = require("node-input-validator");
 const adminRoutes = require("./admin/routes");
 const frontedRoutes = require("./fronted/routes");
-const { oldInput } = require("./middlewares");
+const { oldInput, url } = require("./middlewares");
 
 dotevn.config();
 const app = new Koa();
@@ -45,6 +45,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(oldInput());
+app.use(url());
 app.use(frontedRoutes.routes());
 app.use(frontedRoutes.allowedMethods());
 app.use(adminRoutes.routes());

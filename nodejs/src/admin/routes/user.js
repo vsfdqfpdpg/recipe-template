@@ -1,13 +1,18 @@
 const Router = require("koa-router");
 const db = require("../../../models");
+const { getPaginationParams, getPagination } = require("../../utils");
 
 const routes = new Router({
   prefix: "/user",
 });
 
 routes.get("/", async (ctx) => {
+  let { limit, offset } = getPaginationParams(ctx);
   let users = await db.User.findAndCountAll({
-    limit: 20,
+    order: [["updatedAt", "desc"]],
+    limit,
+    offset,
+    distinct: true,
     include: [
       {
         model: db.Role,
@@ -15,7 +20,12 @@ routes.get("/", async (ctx) => {
       },
     ],
   });
-  await ctx.render("admin/user/list", { title: "Manage user", users });
+
+  await ctx.render("admin/user/list", {
+    title: "Manage user",
+    users,
+    pagination: getPagination(ctx, users),
+  });
 });
 
 routes.get("/:id/role", async (ctx) => {

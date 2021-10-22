@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.User);
+      this.hasMany(models.Comment, {
+        foreignKey: "object_id",
+      });
+      this.hasMany(models.Favourite, {
+        foreignKey: "object_id",
+      });
     }
   }
   Recipe.init(
@@ -29,5 +35,12 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Recipe",
     }
   );
+
+  Recipe.addHook("beforeDestroy", async (instance, options) => {
+    console.log(Reflect.ownKeys(instance.__proto__));
+    let favourites = await instance.getFavourites();
+    Promise.all(favourites.map((favourite) => favourite.destroy()));
+  });
+
   return Recipe;
 };

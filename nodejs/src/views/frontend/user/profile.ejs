@@ -1,6 +1,7 @@
 <%- include("layouts/left") %>
 
 <div>
+  <% if((locals.user && !locals.notLoginUser ) || (locals.user && locals.notLoginUser && locals.user.id == notLoginUser.id) ) { %>
   <div class="accordion" id="accordionPanelsStayOpenExample">
     <div class="accordion-item">
       <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -147,15 +148,38 @@
         </div>
       </div>
     </div>
+    <% } else { %>
+      <div class="card col-8 m-auto">
+        <img src="<%= notLoginUser?.avatar %>" style="width: 320px;" class="card-img-top m-auto mt-3" alt="...">
+        <div class="card-body">
+          <table class="table table-bordered">
+            <tr>
+              <td>Name</td>
+              <td><%= notLoginUser?.name %></td>              
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td><%= notLoginUser?.email %></td>
+            </tr>
+            <tr>
+              <td>CreatedAt</td>
+              <td><%= notLoginUser?.createdAt %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <% } %>
   </div>
 
   <script>
     let avatar = document.querySelector("#avatar");
     let preveiw = document.querySelector(".preview img");
-    avatar.addEventListener("change", (e) => {
+    if(avatar){
+      avatar.addEventListener("change", (e) => {
       let file = e.target.files[0];
       preveiw.src = URL.createObjectURL(file);
     });
+    }
   </script>
 </div>
 <%- include("layouts/right") %>

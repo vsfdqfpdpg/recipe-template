@@ -25,5 +25,12 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Role",
     }
   );
+
+  Role.addScope("admin", {
+    where: {
+      title: "Admin",
+    },
+  });
+
   return Role;
 };

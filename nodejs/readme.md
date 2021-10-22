@@ -11,6 +11,7 @@ npm i koa koa-router koa-body koa-bodyparser koa-views koa-static mysql2 sequeli
 classDiagram
     class User
     User --> EmailVerification
+    User --> UserRole
     User --> LoginHistory
     User "1" --> "*" Recipe
     User --> Role
@@ -95,6 +96,7 @@ classDiagram
 
     class Role
     Role --> RolePermission
+    Role --> UserRole
     Role: Integer id
     Role: String title
     Role: String slug
@@ -103,6 +105,13 @@ classDiagram
     Role: Date created_at
     Role: Date updated_at
 
+
+    class UserRole{
+      +Integer userId
+      +Integer roleId
+      +Date created_at
+      +Date updated_at
+    }
 
     class Permission
     Permission --> RolePermission
@@ -124,10 +133,12 @@ classDiagram
 
     class Comment
     Comment <-- Recipe
+    Comment <-- Comment
     Comment <-- User
     Comment: +Integer id
-    Comment: +Integer user_id
-    Comment: +Integer recipe_id
+    Comment: +Integer UserId
+    Comment: +Integer object_id
+    Comment: +String object_type
     Comment: +String comment
     Comment: Date created_at
     Comment: Date updated_at
@@ -137,6 +148,7 @@ classDiagram
     Favourite --o Recipe
     Favourite --o Comment
     Favourite: +Integer id
+    Favourite: +Integer UserId
     Favourite: +Integer object_id
     Favourite: +String object_type
     Favourite: +Date created_at
@@ -167,6 +179,13 @@ npx sequelize model:generate --name EmailVerification  --attributes url:string,e
 npx sequelize migration:generate --name user_and_role_association
 npx sequelize migration:generate --name add_avatar_to_user
 npx sequelize model:generate --name Recipe --attributes name:string,preserve:boolean,cooking_style:string,category:string,image:string,description:text,duration:integer,status:string,UserId:integer
+npx sequelize model:generate --name Comment --attributes UserId:integer,object_id:integer,object_type:string,comment:string
+npx sequelize model:generate --name Favourite --attributes UserId:integer,object_id:integer,object_type:string
+npx sequelize seed:generate --name create_random_recipe
+npx sequelize seed:generate --name generate-user
+npx sequelize db:seed --seed 20211019075939-generate-user
 ```
 
 https://medium.com/@andrewoons/how-to-define-sequelize-associations-using-migrations-de4333bf75a7
+
+Sequelize associate multiple tables to 1 table with 2 foreign keys

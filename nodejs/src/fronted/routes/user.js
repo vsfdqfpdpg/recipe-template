@@ -4,16 +4,31 @@ const fs = require("fs").promises;
 const db = require("../../../models");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const { pick, sendEmail } = require("../../utils");
+
+const {
+  pick,
+  sendEmail,
+  getPagination,
+  getPaginationParams,
+} = require("../../utils");
+
 const passport = require("koa-passport");
-const { gte, lte } = require("sequelize").Op;
+const { gte, lte, ne } = require("sequelize").Op;
+const { CookingStyle, Category, Status } = require("../../enums");
 
 const routes = new Router({
   prefix: "/user",
 });
 
 routes.get("/", async (ctx) => {
-  await ctx.render("frontend/user/profile", { title: "Edit user profile" });
+  if (ctx.isAuthenticated()) {
+    await ctx.render("frontend/user/profile", {
+      title: "Edit user profile",
+      userId: ctx.state.user.id,
+    });
+  } else {
+    ctx.redirect("/user/login");
+  }
 });
 
 routes.get("/register", async (ctx) => {
@@ -176,6 +191,15 @@ routes.post("/logout", async (ctx) => {
 });
 
 routes.put("/:id/update", async (ctx) => {
+  if (ctx.params.id != ctx.state.user.id) {
+    ctx.status = 401;
+    await ctx.render("frontend/errors/404", {
+      title: "Error",
+      message: "Don't have permission to update this user.",
+    });
+    return;
+  }
+
   let v = ctx.validator(ctx.request.body, {
     first_name: "required|minLength:2|maxLength:18",
     last_name: "required|minLength:2|maxLength:18",
@@ -218,6 +242,15 @@ routes.put("/:id/update", async (ctx) => {
 });
 
 routes.put("/:id/change", async (ctx) => {
+  if (ctx.params.id != ctx.state.user.id) {
+    ctx.status = 401;
+    await ctx.render("frontend/errors/404", {
+      title: "Error",
+      message: "Don't have permission to update this user.",
+    });
+    return;
+  }
+
   let v = ctx.validator(ctx.request.body, {
     old_password: "required|maxLength:18|minLength:8",
     password: "required|maxLength:18|minLength:8",
@@ -255,7 +288,117 @@ routes.put("/:id/change", async (ctx) => {
 });
 
 routes.get("/:id/recipes", async (ctx) => {
-  await ctx.render("frontend/user/recipes", { title: "User's recipies" });
+  let { limit, offset } = getPaginationParams(ctx);
+
+  let where = {
+    UserId: ctx.params.id,
+    status: {
+      [ne]: Status.REJECTED,
+    },
+  };
+
+  if (ctx.isAuthenticated()) {
+    if (ctx.params.id == ctx.state.user.id) {
+      delete where["status"];
+    }
+  }
+
+  let recipes = await db.Recipe.findAndCountAll({
+    where,
+    order: [
+      ["updatedAt", "DESC"],
+      [db.Comment, "createdAt", "DESC"],
+      [
+        db.Comment,
+        { model: db.Comment, as: "SubComment" },
+        "createdAt",
+        "DESC",
+      ],
+    ],
+    distinct: true,
+    limit: limit,
+    offset: offset,
+    include: [
+      {
+        model: db.User,
+        attributes: ["avatar", "first_name", "last_name"],
+      },
+      {
+        model: db.Favourite,
+        where: {
+          object_type: "Recipe",
+          UserId: ctx.params.id,
+        },
+        required: false,
+      },
+      {
+        model: db.Comment,
+        where: {
+          object_type: "Recipe",
+        },
+        required: false,
+        include: [
+          db.User,
+          {
+            model: db.Comment,
+            as: "SubComment",
+            include: [
+              db.User,
+              {
+                model: db.Favourite,
+                where: {
+                  object_type: "Comment",
+                  UserId: ctx.params.id,
+                },
+                required: false,
+              },
+            ],
+            where: {
+              object_type: "Comment",
+            },
+            required: false,
+          },
+          {
+            model: db.Favourite,
+            where: {
+              object_type: "Comment",
+              UserId: ctx.params.id,
+            },
+            required: false,
+          },
+        ],
+      },
+    ],
+  });
+
+  await ctx.render("frontend/user/recipes", {
+    userId: ctx.params.id,
+    title: "User's recipies",
+    recipes,
+    pagination: getPagination(ctx, recipes),
+    enums: {
+      CookingStyle,
+      Category,
+      Status,
+    },
+  });
+});
+
+routes.get("/:id", async (ctx) => {
+  let notLoginUser = await db.User.findByPk(ctx.params.id);
+  if (!notLoginUser) {
+    ctx.status = 404;
+    await ctx.render("frontend/errors/404", {
+      title: "User is not found",
+      message: `User is not exist.`,
+    });
+    return;
+  }
+  await ctx.render("frontend/user/profile", {
+    title: "Edit user profile",
+    userId: ctx.params.id,
+    notLoginUser,
+  });
 });
 
 module.exports = routes;

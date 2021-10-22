@@ -23,7 +23,34 @@ async function sendEmail(to, subject, text) {
 
   console.log("Message sent: %s", info.messageId);
 }
+
+const dateFormat = (d) =>
+  [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/") +
+  " " +
+  [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
+
+const getPaginationParams = (ctx) => {
+  let limit = ctx.query.limit ? +ctx.query.limit : 20;
+  let offset =
+    ctx.query.page && ctx.query.page - 1 > 0 ? (ctx.query.page - 1) * limit : 0;
+  let currentPage = ctx.query.page || 1;
+  return { limit, offset, currentPage };
+};
+
+const getPagination = (ctx, obj) => {
+  let { limit, currentPage } = getPaginationParams(ctx);
+  let totalPage = Math.ceil(obj.count / limit);
+  return {
+    currentPage: parseInt(currentPage),
+    totalPage,
+    path: `${ctx.path}?limit=${limit}`,
+  };
+};
+
 module.exports = {
   pick,
   sendEmail,
+  dateFormat,
+  getPaginationParams,
+  getPagination,
 };

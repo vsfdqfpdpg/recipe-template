@@ -18,11 +18,15 @@
         <div class="container">
           <a href="/" class="navbar-brand">Home</a>
           <div class="collapse justify-content-between navbar-collapse">
+            
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a href="/recipe/create" class="nav-link">Create a recipe</a>
-              </li>
+              <% if(locals.user){ %>
+                <li class="nav-item">
+                  <a href="/recipe/create" class="nav-link">Create a recipe</a>
+                </li>
+                <% } %>
             </ul>
+            
             <ul class="navbar-nav">
               <li class="nav-item dropdown">
                 <a
@@ -35,16 +39,19 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                   <% if(locals.user){ %>
                   <li class="dropdown-item">
+                    <a href="/user" class="btn btn-link">Profile</a>
+                  </li>
+                  <li class="dropdown-item">
                     <form action="/user/logout" method="post">
                       <button type="submit" class="btn btn-link">Logout</button>
                     </form>
                   </li>
                   <% }else{ %>
                   <li class="dropdown-item">
-                    <a href="/user/register" class="btn btn-link">Register</a>
+                    <a href="/user/login" class="btn btn-link">Login</a>
                   </li>
                   <li class="dropdown-item">
-                    <a href="/user/login" class="btn btn-link">Login</a>
+                    <a href="/user/register" class="btn btn-link">Register</a>
                   </li>
                   <% } %>
                 </ul>

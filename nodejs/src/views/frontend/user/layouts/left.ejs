@@ -6,11 +6,12 @@
       top: 72px;
       height: calc(100vh - 72px);
       min-height: calc(100vh - 72px);
+      border-radius: 5px;
     }
   </style>
   <div class="row">
-    <nav class="bg-light col-lg-2 col-md-3 sidebar">
-      <a href="/user" class="nav-link mt-3">Basic Info</a>
-      <a href="/user/<%= locals?.user?.id%>/recipes" class="nav-link">Recipes</a>
+    <nav class="bg-light col-lg-2 col-md-3 nav-pills sidebar">
+      <a href="/user/<%= userId %>" class="nav-link mt-3 <%= /frontend\/user\/profile.ejs/.test(filename) ? "active" : ""%>">Basic Info</a>
+      <a href="/user/<%= userId %>/recipes" class="nav-link <%= /frontend\/user\/recipes.ejs/.test(filename) ? "active" : ""%>">Recipes</a>
     </nav>
     <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">

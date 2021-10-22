@@ -36,7 +36,7 @@
 
       <% }) %>
     </table>
-    <% }else{ %>
+    <%- include("../layouts/pagination") %> <% }else{ %>
     <div class="alert alert-warning m-3">
       <span>There is no permission.</span>
     </div>

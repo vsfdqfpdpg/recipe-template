@@ -1,5 +1,5 @@
 const Router = require("koa-router");
-
+const { getPagination, getPaginationParams } = require("../../utils");
 const db = require("../../../models");
 
 const routes = new Router({
@@ -7,10 +7,12 @@ const routes = new Router({
 });
 
 routes.get("/", async (ctx) => {
-  let permissions = await db.Permission.findAndCountAll({ limit: 10 });
+  let { limit, offset } = getPaginationParams(ctx);
+  let permissions = await db.Permission.findAndCountAll({ limit, offset });
   await ctx.render("admin/permission/list", {
     title: "Manage permission",
-    permissions: permissions,
+    permissions,
+    pagination: getPagination(ctx, permissions),
   });
 });
 
