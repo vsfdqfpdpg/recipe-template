@@ -1,0 +1,29 @@
+<%- include("../layouts/header") %>
+<div class="container">
+  <form action="/user/login" method="post">
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" class="form-control <%=
+      locals?.oldInput?.email?.message ? "is-invalid" : "" %>" value="<%=
+      locals?.oldInput?.email?.value %>" />
+      <div id="" class="invalid-feedback">
+        <%= locals?.oldInput?.email?.message %>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-sm btn-primary form-control">
+        Login
+      </button>
+    </div>
+  </form>
+</div>
+<%- include("../layouts/footer") %>

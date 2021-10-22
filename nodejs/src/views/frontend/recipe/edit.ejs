@@ -1,0 +1,118 @@
+<%- include("../layouts/header") %>
+
+<div class="mt-3 container">
+  <form action="/recipe/<%=recipe.id%>/update" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT">
+    <div class="mb-3">
+      <label for="name mb-1">Name</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        class="form-control"
+        value="<%= recipe.name %>"
+      />
+      <div class="invalid-feedback"></div>
+    </div>
+    <div class="">
+      <span class="d-block mb-1">Preservable</span>
+      <div class="mb-3 form-check form-check-inline p-0">
+        <input type="radio" name="preserve" id="preserve_yes" value="true" <%=
+        recipe.preserve === true ? "checked" : "" %> />
+        <label for="preserve_yes">Yes</label>
+      </div>
+      <div class="mb-3 form-check form-check-inline">
+        <input type="radio" name="preserve" id="preserve_no" value="false" <%=
+        recipe.preserve !== true ? "checked" : "" %> />
+        <label for="preserve_no">No</label>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="cooking_style" class="mb-1">Cooking Style</label>
+      <select name="cooking_style" id="cooking_style" class="form-control">
+        <% for( cs in locals?.enums.CookingStyle) { %> <% if(isNaN(cs)) { %>
+        <option value="<%= locals?.enums.CookingStyle[cs] %>" <%=
+            recipe.cooking_style == locals?.enums.CookingStyle[cs] ? "selected" : "" %>  >
+          <%= cs[0] + cs.slice(1).toLowerCase() %>
+        </option>
+        <% } %> <%}%>
+      </select>
+    </div>
+    <div class="mb-3">
+      <span class="d-block mb-1">Category</span>
+      <% for(ca in locals?.enums?.Category){ if(isNaN(ca)){ %>
+      <div class="form-check form-check-inline">
+        <input
+          type="checkbox"
+          name="category"
+          id="<%= ca[0]+ ca.slice(1).toLowerCase() %>"
+          class="form-check-input"
+          value="<%= locals?.enums?.Category[ca] %>"
+          <%= recipe.category.split(",").includes(locals?.enums?.Category[ca] + "") ? "checked" : "" %>
+        />
+        <label
+          for="<%= ca[0]+ ca.slice(1).toLowerCase() %>"
+          class="form-check-label"
+          ><%= ca[0]+ ca.slice(1).toLowerCase() %></label
+        >
+      </div>
+      <% }} %>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="mb-1">Image</label>
+      <input
+        type="file"
+        name="image"
+        id="image"
+        class="form-control"
+        accept="image/*"
+      />
+      <div class="mt-3 preview">
+          <img src="<%= recipe.image %>" alt="" height="150px" width="150px">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="mb-1">Description</label>
+      <textarea
+        name="description"
+        id="description"
+        cols="30"
+        rows="10"
+        class="form-control"
+      >
+<%= recipe.description %></textarea
+      >
+      <div class="invalid-feedback"></div>
+    </div>
+    <label for="duration" class="mb-1">Duration</label>
+    <div class="mb-3 input-group">
+      <input
+        type="number"
+        name="duration"
+        id="duration"
+        class="form-control"
+        min="1"
+        value="<%= recipe.duration %>"
+      />
+      <span class="input-group-text">minutes</span>
+      <div class="invalid-feedback"></div>
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-sm btn-primary form-control">
+        Update
+      </button>
+    </div>
+  </form>
+</div>
+<script>
+    let image = document.querySelector("#image");
+    let preview = document.querySelector(".preview img")
+    image.addEventListener("change", e => {
+        let file = e.target.files[0]
+        preview.src = URL.createObjectURL(file)
+    })
+</script>
+<pre><%=JSON.stringify(locals,null,4)%></pre>
+<%- include("../layouts/footer") %>

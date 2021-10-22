@@ -1,0 +1,42 @@
+<%- include('../layouts/header'); %>
+<div class="mt-3">
+  <div>
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Avatar</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Is Confirmed</th>
+        <th>Roles</th>
+        <th>Actions</th>
+      </tr>
+      <% users.rows.forEach(u => { %>
+
+      <tr>
+        <td><%= u.id %></td>
+        <td>
+          <img src="<%= u.avatar %>" alt="" width="32px" height="32px" />
+        </td>
+        <td><%= u.first_name %></td>
+        <td><%= u.last_name %></td>
+        <td><%= u.email %></td>
+        <td><%= u.is_comfirmed ? "true" : "false" %></td>
+        <td>
+          <% u.Roles.map(r => r.title).forEach( r => { %>
+          <button class="btn btn-sm btn-secondary"><%= r %></button>
+          <% }) %>
+        </td>
+        <td>
+          <a href="/admin/user/<%= u.id %>/role" class="btn btn-sm btn-info"
+            >Assign Role</a
+          >
+        </td>
+      </tr>
+      <% }) %>
+    </table>
+  </div>
+  <%- include("../layouts/pagination") %>
+</div>
+<%- include('../layouts/footer'); %>

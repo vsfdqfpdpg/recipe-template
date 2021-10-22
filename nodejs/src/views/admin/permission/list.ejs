@@ -1,0 +1,46 @@
+<%- include('../layouts/header'); %>
+<div class="mt-3">
+  <div class="">
+    <a href="/admin/permission/create" class="btn btn-sm btn-primary">Add</a>
+  </div>
+  <div class="row">
+    <% if(permissions.rows.length) {%>
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Active</th>
+        <th>Actions</th>
+      </tr>
+      <% permissions.rows.forEach((item) => { %>
+
+      <tr>
+        <td><%= item.id %></td>
+        <td><%= item.title %></td>
+        <td><%= item.description %></td>
+        <td><%= item.active %></td>
+        <td>
+          <a
+            href="/admin/permission/<%= item.id %>/edit"
+            class="btn btn-info btn-sm"
+            >Update</a
+          >
+          <a
+            href="/admin/permission/<%= item.id %>/delete"
+            class="btn btn-danger btn-sm"
+            >Delete</a
+          >
+        </td>
+      </tr>
+
+      <% }) %>
+    </table>
+    <%- include("../layouts/pagination") %> <% }else{ %>
+    <div class="alert alert-warning m-3">
+      <span>There is no permission.</span>
+    </div>
+    <% } %>
+  </div>
+</div>
+<%- include('../layouts/footer'); %>
