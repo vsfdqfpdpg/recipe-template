@@ -22,8 +22,12 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $path = storage_path("app/avatars");
         return [
-            'name' => $this->faker->name(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'avatar' => 'avatars/' . $this->faker->image($path, 640, 480, null, false),
+            'locked' => false,
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
