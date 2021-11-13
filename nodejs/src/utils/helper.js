@@ -7,7 +7,10 @@ const pick =
 
 async function sendEmail(to, subject, text) {
   let transporter = nodemailer.createTransport({
-    service: "QQex",
+    pool: true,
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    secure: process.env.MAIL_ENCRYPTION ? true : false,
     auth: {
       user: process.env.MAIL_USERNAME,
       pass: process.env.MAIL_PASSWORD,
@@ -15,7 +18,7 @@ async function sendEmail(to, subject, text) {
   });
 
   let info = await transporter.sendMail({
-    from: process.env.MAIL_USERNAME,
+    from: process.env.MAIL_FROM_ADDRESS,
     to,
     subject,
     text,

@@ -54,6 +54,8 @@ app.use(adminRoutes.allowedMethods());
 console.log(frontedRoutes.stack.map((i) => i.path));
 console.log(adminRoutes.stack.map((i) => i.path));
 
-app.listen(8000, () => {
-  console.log("http://localhost:8000");
+const port = process.env.PORT || 8000;
+
+app.listen(port, () => {
+  console.log(`http://localhost:${port}`);
 });

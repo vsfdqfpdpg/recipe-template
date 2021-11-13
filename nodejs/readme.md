@@ -189,3 +189,25 @@ npx sequelize db:seed --seed 20211019075939-generate-user
 https://medium.com/@andrewoons/how-to-define-sequelize-associations-using-migrations-de4333bf75a7
 
 Sequelize associate multiple tables to 1 table with 2 foreign keys
+
+### Make a fold for uploaded images
+
+```
+mkdir static/uploads
+```
+
+### Enviration
+
+```
+.env
+
+PORT=8001
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=
+```
