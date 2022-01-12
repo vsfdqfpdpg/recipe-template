@@ -7,7 +7,7 @@ class RecipeRouteMethods
     public function recipes()
     {
         return function () {
-            $this->group(['prefix' => 'recipe', 'namespace' => 'App\Http\Controllers\Frontend'], function () {
+            $this->group(['prefix' => '/recipe', 'namespace' => 'App\Http\Controllers\Frontend'], function () {
                 $this->get('/', 'RecipeController@index')->name('recipe');
                 $this->get("/create", 'RecipeController@create')->name("recipe.create");
                 $this->get('/{recipe}', 'RecipeController@show')->name("recipe.show");

@@ -13,7 +13,7 @@ class AdminRouteMethods
                 $this->users();
                 $this->roles();
                 $this->permissions();
-                $this->recipes();
+                $this->admin_recipes();
             });
         };
     }
@@ -57,7 +57,7 @@ class AdminRouteMethods
         };
     }
 
-    public function recipes()
+    public function admin_recipes()
     {
         return function () {
             $this->get("/recipes", "RecipeController@index")->name('admin.recipes');
